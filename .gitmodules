@@ -1,0 +1,3 @@
+[submodule "BookStore-Web-App"]
+	path = BookStore-Web-App
+	url = https://github.com/DiegoSalas27/BookStore-Web-App.git

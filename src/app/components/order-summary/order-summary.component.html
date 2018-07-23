@@ -1,0 +1,35 @@
+<div class="container">
+ <app-logo spanLabel="Order Summary"></app-logo>
+
+ <div class="row" style="margin-top: 40px;">
+  <div class="col-12">
+   <div class="alert alert-success">
+     <h3><i class="fa fa-check" style="color: limegreen;"></i> Thank you, your order has been placed.</h3>
+     <h4>The estimated delivery date is <span>{{estimatedDeliveryDate}}</span></h4>
+   </div>
+  </div>
+ </div>
+    <br>
+    <h3>List of Items</h3>
+   <div class="row" *ngFor="let cartItem of cartItemList" style="margin-bottom: 40px;">  
+      <hr/>
+      <div class="col-2">
+          <a (click)="onSelect(cartItem.book)"><img class="img-responsive pointer" src="{{serverPath}}/image/book/{{cartItem.book.id}}.png" style="width:100px;" /></a>
+        </div>
+      <div class="col-6">
+        <a class="pointer" (click)="onSelect(cartItem.book)"><h4>{{cartItem.book.title}}</h4></a>
+        <p *ngIf="cartItem.book.inStockNumber>10" style="color:green;">In Stock</p>
+        <p *ngIf="cartItem.book.inStockNumber<10" style="color:brown;">Only <span>{{cartItem.book.inStockNumber}}</span> In Stock</p>
+        <p *ngIf="cartItem.book.inStockNumber == 0" style="color:darkred;">Out of Stock</p>
+        <a class="pointer" (click)="onRemoveCartItem(cartItem)">Delete</a>
+      </div>
+      <div class="col-2">
+        <!-- ngClass attaches a class to this element based on a condition. In this case we attach the text strike to it -->
+        <h5 style="color: #db3208; font-size: large;">$<span [ngClass]="{'text-strike': cartItem.book.inStockNumber == 0}">{{cartItem.book.ourPrice}}</span></h5>
+      </div>
+      <div class="col-2 text-center">
+        <h5 style="font-size: large;">{{cartItem.qty}}</h5>
+      </div>
+    </div>
+
+</div>

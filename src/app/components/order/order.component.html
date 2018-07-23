@@ -1,0 +1,342 @@
+<div class="container">
+ <app-logo spanLabel="Checkout"></app-logo>
+
+ <div class="row" style="margin-top: 40px;">
+  <div class="col-4">
+    <form (ngSubmit)="onSubmit()" method="post">
+      <div class="panel panel-default panel-faq"> 
+        <div class="panel-body shadow p-10 mb-12" style="padding: 20px;">
+          <button mat-raised-button type="submit " class="btn-block custom">Place your order
+          </button>
+          <p style="font-size: smaller; margin-top: 10px;">By placing your order, you agree to Le's Bookstore <a href="#">privacy</a> notice and
+              <a href="#">conditions</a> of use.</p>
+          <hr/>
+          <h3>Order Summary</h3>
+          <div class="row">
+              <div class="col-7 text-left">
+                  Total before tax:
+              </div>
+              <div class="col-5 text-right">
+                  $
+                  <span>{{shoppingCart.grandTotal}}</span>
+              </div>
+          </div>
+          <div class="row ">
+              <div class="col-7 text-left ">
+                  Estimated tax:
+              </div>
+              <div class="col-5 text-right ">
+                  $<span>{{shoppingCart.grandTotal*0.06 | number : '1.2-2'}}</span>
+              </div>
+          </div>
+          <hr />
+          <div class="row ">
+              <div class="col-7 text-left ">
+                  <h3 style="color:darkred; "><strong>Order total:</strong></h3>
+              </div>
+              <div class="col-5 text-right ">
+                  <h3><strong style="color:darkred; ">$<span
+                          >{{shoppingCart.grandTotal*1.06 | number : '1.2-2'}}</span>
+                  </strong></h3>
+              </div>
+          </div>
+          <div class="panel-footer">Shipping and handling haven't applied.</div>
+        </div>
+      </div>
+    </form>
+    </div>
+   <div class="col-8" style="margin-top: 15px;">
+    <form (ngSubmit)="onSubmit()" method="post">
+     <div *ngIf="missingRequiredField">
+       <h5 class="alert alert-warning">There are some fields missing. Field with * is required.</h5>
+     </div>
+     <mat-tab-group dynamicHeight (selectedIndexChange)="selectedChange($event)" [selectedIndex]="selectedTab"
+     class="shadow p-10 mb-12" style="padding: 20px;">
+       <!-- 1. Shipping address -->
+       <mat-tab label="1. Shipping Address">
+         <div class="panel panel-default">
+           <div class="panel-heading">
+             <h4 class="panel-title" style="margin-top: 10px;">
+               1. Shipping Address
+             </h4>
+           </div>
+           <div class="panel-body">
+             <table class="table" *ngIf="!emptyShippingList">
+               <thead>
+                 <tr>
+                   <th>Available Shipping Address</th>
+                   <th>Operation</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 <tr *ngFor="let userShipping of userShippingList">
+                   <td>
+                     {{userShipping.userShippingStreet1}},
+                     {{userShipping.userShippingStreet2}},
+                     {{userShipping.userShippingCity}},
+                     {{userShipping.userShippingState}}
+                   </td>
+                   <td>
+                     <a class="pointer" (click)="setShippingAddress(userShipping)">Use this address</a>
+                   </td>
+                 </tr>
+               </tbody>
+             </table>
+
+             <div class="form-group">
+               <label for ="shippingAddressName">* Name</label>
+               <input type="text" class="form-control" id="shippingName" placeholder="Reciever name" name="shippingAddressName" required="required" [(ngModel)]="shippingAddress.shippingAddressName" />
+             </div>
+             <div class="form-group">
+              <label for="shippingAddress">* Street address</label>
+              <input type="text" class="form-control" id="shippingAddress" placeholder="Street address 1" name="ShippingAddressStreet1" required="required" [(ngModel)]="shippingAddress.shippingAddressStreet1"/>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Street address 2" name="ShippingAddressStreet2" [(ngModel)]="shippingAddress.shippingAddressStreet2"/>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="form-group">
+                   <label for="ShippingCity">* Shipping City</label>
+                   <input type="text" class="form-control" id="ShippingCity" placeholder="Your Billing City" name="ShippingCity" required="required" [(ngModel)]="shippingAddress.shippingAddressCity"/>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="ShippingState">* Shipping State</label>
+                  <select id="ShippingState" class="form-control" name="ShippingState" [(ngModel)]="shippingAddress.shippingAddressState" required="=required">
+                    <option value="" disabled>-- state --</option>
+                    <option *ngFor="let state of stateList">{{state}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                   <label for="ShippingZipcode">* Zipcode</label>
+                   <input type="text" class="form-control" id="ShippingZipcode" placeholder="Zipcode" name="ShippingZipcode" required="required" [(ngModel)]="shippingAddress.shippingAddressZipcode"/>
+                </div>
+              </div>
+            </div>
+            <a mat-raised-button class="custom" (click)="goToPayment()">Next</a>
+           </div>
+         </div>
+       </mat-tab>
+
+       <!-- 2. Payment Information -->
+       <mat-tab label="2. Payment Information">
+        <div class="panel panel-default panel-faq">
+          <div class="panel-heading">
+            <h4 class="panel-title" style="margin-top: 10px;">
+              2. Payment Information
+            </h4>
+          </div>
+
+         <div class="panel-body">
+           <table class="table" *ngIf="!emptyPaymentList">
+             <thead>
+               <tr>
+                 <th>Available Credit Card</th>
+                 <th>Operation</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr *ngFor="let userPayment of userPaymentList">
+                 <td>
+                   {{userPayment.cardName}}
+                 </td>
+                 <td>
+                   <a class="pointer" (click)="setPaymentMethod(userPayment)">Use this payment method</a>
+                 </td>
+               </tr>
+             </tbody>
+           </table>
+
+           <!-- Credit card Informarion -->
+           <div class="row">
+              <div class="col-12">
+                <img src="../../../assets/image/creditcard.png" class="img-fluid"/>
+                <br>
+                <div class="form-group">
+                  <label for="cardType">* Select card Type</label>
+                  <select id="cardType" class="form-control" name="cardType" [(ngModel)]="userPayment.type" required="=required">
+                    <option value="" disabled>-- card Type --</option>
+                    <option value="visa">Visa</option>
+                    <option value="masterpanel">Masterpanel</option>
+                    <option value="amex">Amrican Express</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                   <label for="cardHolder">* card Holder</label>
+                   <input type="text" class="form-control" id="cardHolder" placeholder="card holder name" name="cardHolderName" required="required" [(ngModel)]="payment.holderName"/>
+                </div>
+                <div class="form-group">
+                  <label for="cardNumber">* card Number</label>
+                  <div class="input-group">
+                    <input style="margin-right: 10px;" required="required" id="cardNumber" type="tel" class="form-control" name="cardNumber" placeholder="Valid card Number" [(ngModel)]="payment.cardNumber"/>
+                    <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7">
+                <div class="form-group">
+                  <label>* Expiration Date</label>
+                  <div class="row">
+                    <div class="col-6">
+                      <select class="form-control" name="expiryMonth" required="required" [(ngModel)]="payment.expiryMonth">
+                        <option value="" disabled="disabled">-- Month --</option>
+                        <option value="1">Jan (01)</option>
+                        <option value="2">Feb (02)</option>
+                        <option value="3">Mar (03)</option>
+                        <option value="4">Apr (04)</option>
+                        <option value="5">May (05)</option>
+                        <option value="6">Jun (06)</option>
+                        <option value="7">Jul (07)</option>
+                        <option value="8">Aug (08)</option>
+                        <option value="9">Sep (09)</option>
+                        <option value="10">Oct (10)</option>
+                        <option value="11">Nov (11)</option>
+                        <option value="12">Dec (12)</option>
+                      </select>
+                    </div>
+                    <div class="col-6">
+                      <select class="form-control" name="expiryYear" required="required" [(ngModel)]="payment.expiryYear">
+                        <option value="" disabled>-- Year --</option>
+                        <option value="17">2017</option>
+                        <option value="18">2018</option>
+                        <option value="19">2019</option>
+                        <option value="20">2020</option>
+                        <option value="21">2021</option>
+                        <option value="22">2022</option>
+                        <option value="23">2023</option>
+                        <option value="24">2024</option>
+                        <option value="25">2025</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-5 pull-right">
+                <div class="form-group">
+                  <label for="panelCVC"> CVC Code</label>
+                  <input id="panelCVC" type="tel" class="form-control" name="panelCVC" placeholder="CVC" [(ngModel)]="payment.cvc"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox">
+              <label>
+                <input id="theSameAsShippingAddress" type="checkbox" name="billingSameAsShipping" value="true" (click)="setBillingAsShipping($event.target.checked)"/>The same as shipping address.
+              </label>
+            </div>
+
+            <!-- billing address -->
+
+            <div class="form-group">
+              <label for="billingName">* Name</label>
+              <input type="text" class="form-control" id="billingName" placeholder="Receiver name" name="billingAddressName" required="required" [(ngModel)]="billingAddress.billingAddressName"/>
+            </div>
+            <div class="form-group">
+              <label for="billingAddress">* Street address</label>
+              <input type="text" class="form-control" id="billingAddress" placeholder="Street address 1" name="billingAddressStreet1" required="required" [(ngModel)]="billingAddress.billingAddressStreet1"/>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Street address 2" name="billingAddressStreet2" [(ngModel)]="billingAddress.billingAddressStreet2"/>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="form-group">
+                   <label for="billingCity">* City</label>
+                   <input type="text" class="form-control" id="billingCity" placeholder="Your Billing City" name="billingAddressCity" required="required" [(ngModel)]="billingAddress.billingAddressCity"/>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="billingState">* State</label>
+                  <select id="billingState" class="form-control" name="billingAddressState" [(ngModel)]="billingAddress.billingAddressState" required="=required">
+                    <option value="" disabled>-- state --</option>
+                    <option *ngFor="let state of stateList">{{state}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-group">
+                   <label for="billingZipcode">* Zipcode</label>
+                   <input type="text" class="form-control" id="billingZipcode" placeholder="Your Billing Zipcode" name="billingAddressZipcode" required="required" [(ngModel)]="billingAddress.billingAddressZipcode"/>
+                </div>
+              </div>
+            </div>
+            <a mat-raised-button class="custom" (click)="goToReview()">Next</a>
+          </div>
+        </div>
+       </mat-tab>
+
+       <!-- 3. Review Items and Shipping -->
+       <mat-tab label="3. Review">
+         <div class="panel panel-default panel-faq">
+           <div class="panel-heading">
+             <h4 class="panel-title" style="margin-top: 10px;">
+               3. Review Items and Shipping and Choose your shipping method:
+             </h4>
+           </div>
+           <div class="panel-body">
+             <div class="radio">
+               <label>
+                 <input type="radio" name="shippingMethod" value="groundShipping" [(ngModel)]="shippingMethod" />
+                 Ground Shipping
+               </label>
+             </div>
+             <div class="radio">
+               <label>
+                 <input type="radio" name="shippingMethod" value="premiumShipping" [(ngModel)]="shippingMethod" />
+                 Premium Shipping
+               </label>
+             </div>
+
+             <div class="row">
+               <div class="col-8">
+                 <h4>Products</h4>
+               </div>
+               <div class="col-2">
+                 <h4>Price</h4>
+               </div>
+               <div class="col-2">
+                 <h4>Quantity</h4>
+               </div>
+             </div>
+
+             <!-- display products -->
+             <div class="row" *ngFor="let cartItem of cartItemList" style="margin-bottom: 10px;">
+               <hr />
+               <div class="col-2">
+                  <a (click)="onSelect(cartItem.book)"><img class="img-responsive pointer" src="{{serverPath}}/image/book/{{cartItem.book.id}}.png" style="width:100px;" /></a>
+                </div>
+                <div class="col-6">
+                  <a class="pointer" (click)="onSelect(cartItem.book)"><h4>{{cartItem.book.title}}</h4></a>
+                  <p *ngIf="cartItem.book.inStockNumber>10" style="color:green;">In Stock</p>
+                  <p *ngIf="cartItem.book.inStockNumber<10" style="color:brown;">Only <span>{{cartItem.book.inStockNumber}}</span> In Stock</p>
+                  <p *ngIf="cartItem.book.inStockNumber == 0" style="color:darkred;">Out of Stock</p>
+                  <a class="pointer" (click)="onRemoveCartItem(cartItem)">Delete</a>
+                </div>
+                <div class="col-2">
+                  <!-- ngClass attaches a class to this element based on a condition. In this case we attach the text strike to it -->
+                  <h5 style="color: #db3208; font-size: large;">$<span [ngClass]="{'text-strike': cartItem.book.inStockNumber == 0}">{{cartItem.book.ourPrice}}</span></h5>
+                </div>
+                <div class="col-2 text-center">
+                  <h5 style="font-size: large;">{{cartItem.qty}}</h5>
+                </div>
+              </div>
+              <div class="row">
+                <h4 class="col-12 text-right"><strong style="font-size: large">Total Price (<span>{{cartItemNumber}}</span> items):</strong><span style="color: #db3208; font-size: large">$<span>{{shoppingCart.grandTotal}}</span></span></h4>
+                <br/><br/>
+                <button mat-raised-button type="submit" class="btn-block custom">Place your order</button>
+              </div>
+             </div>
+           </div>
+       </mat-tab>
+     </mat-tab-group>
+   </form>
+   </div>
+ </div>
+</div>

@@ -1,0 +1,67 @@
+footer{
+  color: white;
+  margin-top: 100px;
+}
+footer a{
+  color: #DADADA;
+}
+footer a:hover{
+  color: white;
+}
+
+.title{
+  color: white;
+}
+.footer-bottom{
+  background: #3D3D3D;
+  padding: 0.5em;
+}
+.footer-top{
+  background: #3D3D3D;  
+}
+.footer-middle{
+  background: #727272;
+  padding-top: 2em;
+  color: #DADADA;
+}
+/**Sub Navigation**/
+.subnavigation-container{
+  background: #3d6277;
+}
+.subnavigation .nav-link{
+  color: white;
+  font-weight: bold;
+}
+.subnavigation-container{
+  text-align: center;
+}
+.subnavigation-container .navbar{
+  display: inline-block;
+  margin-bottom: -6px; /* Inline-block margin offffset HACK -Gilron */
+}
+.col-subnav a{
+  padding: 1rem 1rem;
+  color: white;
+  font-weight: bold;
+}
+.col-subnav .active{
+  border-top:5px solid orange;
+ background: white;
+  color: black;
+}
+
+.list-unstyled > li > a {
+ text-decoration: none;
+ transition: color 0.3s linear;
+ -webkit-transition: color 0.3s linear;
+ -moz-transition: color 0.3s linear;
+  padding-top: 10px;
+  color: #DADADA;
+  margin-left:30px;
+}
+
+.list-unstyled > li > a:hover,
+.list-unstyled > li > a:focus {
+    color: white;
+
+}

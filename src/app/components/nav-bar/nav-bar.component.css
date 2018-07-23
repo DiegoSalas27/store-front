@@ -1,0 +1,75 @@
+/*customize navbar*/
+
+.navbar-default {
+    background-color: #EF6C00;
+    border-color: #EF6C00;
+}
+/* Title */
+.navbar-default .navbar-brand {
+   color: white;
+   text-decoration: none;
+   transition: color 0.3s linear;
+   -webkit-transition: color 0.3s linear;
+   -moz-transition: color 0.3s linear;
+   font-weight: bold;
+   color: #DADADA;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: white;
+}
+/* Link */
+.navbar-default .navbar-nav > li > a {
+ text-decoration: none;
+ transition: color 0.3s linear;
+ -webkit-transition: color 0.3s linear;
+ -moz-transition: color 0.3s linear;
+  padding-top: 10px;
+  color: #DADADA;
+  margin-left:30px;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: white;
+
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #555;
+    background-color: #E7E7E7;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: #555;
+    background-color: #D5D5D5;
+}
+
+.form-control{
+  margin-right: 10px;
+  margin-left: 10px;
+}
+ 
+/*styles for the button*/
+
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+ 
+.btn-outline-warning {
+    background: #f46b42;
+    border-color: #f46b42;
+    color: #DADADA;
+}
+ 
+.btn-outline-warning:hover, .btn-outline-warning:focus, .btn-outline-warning:active, .btn-outline-warning.active, .open > .dropdown-toggle.btn-outline-warnin {
+    background: #ff805b;
+    border-color: #f46b42;
+    color: white;
+}
+ 
+.btn-outline-warning:active, .btn-outline-warning.active {
+    background: #007299;
+    box-shadow: none;
+}
